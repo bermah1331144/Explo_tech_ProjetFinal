@@ -1,6 +1,8 @@
 --Création de la BD
 CREATE DATABASE BDallumeToi;
 
+
+ ---MArche tu?
 --Création des role
 CREATE TABLE Role (
     role_id     SMALLINT(6)         NOT NULL        AUTO_INCREMENT,
