@@ -1,6 +1,12 @@
 --Création de la BD
 CREATE DATABASE BDallumeToi;
 
+--Création des role
+CREATE TABLE Role (
+    role_id     SMALLINT(6)         NOT NULL        AUTO_INCREMENT,
+    role_name   VARCHAR(50)         NOT NULL,
+    PRIMARY KEY (role_id) 
+);
 
 -- Création de la table des utilisateur
 CREATE TABLE utilisateur(
@@ -40,33 +46,28 @@ CREATE TABLE UserAttempt (
     FOREIGN KEY (utilisateur_id) REFERENCES User(utilisateur_id)
 );
 
---Création des role
-CREATE TABLE Role (
-    role_id     SMALLINT(6)         NOT NULL        AUTO_INCREMENT,
-    role_name   VARCHAR(50)         NOT NULL,
-    PRIMARY KEY (role_id) 
-);
 
-
---Données dans la table utilisateur
-INSERT INTO utilisateur (prenom,nom,motDePasse,email,[role]) VALUES
-('Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca','admin'),
-('Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca','admin'),
-('Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca','utilisateur');
-
---Donnée dans la table température
-INSERT INTO temperature (tempeFroid,tempeChaud,tiede) VALUES
-(false,false,false);
-
---Données dans ;a table pour le bruit
-INSERT INTO bruit(bruitDangereux) VALUES
-(false);
 
 --Valeur possible pour les roles
 INSERT INTO Role (role_name) VALUES
 ("Admin"),
 ("Utilisateur"),
 ("Visiteur");
+
+--Données dans la table utilisateur
+INSERT INTO utilisateur (prenom,nom,motDePasse,email,role_id) VALUES
+('Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
+('Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
+('Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
+
+--Donnée dans la table température
+INSERT INTO temperature (tempeFroid,tempeChaud,tiede) VALUES
+(false,false,false);
+
+--Données dans ;a table pour le bruit
+INSERT INTO bruit(bruit) VALUES
+(false);
+
 
 --Donnee dans la table attempt
 INSERT INTO UserAttempt (last_attempt, attempts, blocked, user_id) VALUES
