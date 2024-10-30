@@ -1,19 +1,17 @@
 --Création de la BD
+DROP DATABASE BDallumeToi;
 CREATE DATABASE BDallumeToi;
+USE BDallumeToi;
 
-
- ---MArche tu?
---Création des role
 CREATE TABLE Role (
     role_id     SMALLINT(6)         NOT NULL        AUTO_INCREMENT,
     role_name   VARCHAR(50)         NOT NULL,
     PRIMARY KEY (role_id) 
 );
 
--- Création de la table des utilisateur
-CREATE TABLE utilisateur(
-    user_id      SMALLINT(6)     NOT NULL     AUTO_INCREMENT,
-    nomUtilisateur      VARCHAR(50)     NOT NULL     UNIQUE,
+CREATE TABLE User(
+    user_id             SMALLINT(6)     NOT NULL     AUTO_INCREMENT,
+    username            VARCHAR(50)     NOT NULL     UNIQUE,
     prenom              VARCHAR(50)     NOT NULL,
     nom                 VARCHAR(50)     NOT NULL,
     motDePasse          VARCHAR(50)     NOT NULL,
@@ -23,55 +21,49 @@ CREATE TABLE utilisateur(
     FOREIGN KEY (role_id) REFERENCES Role(role_id)
 );
 
-
--- Creation de la table des températrature
 CREATE TABLE temperature(
-    temperature         DECIMAL(3,1),
-    historiqueTemps     TIME,
-    tempeFroid          BOOLEAN     NOT NULL,
-    tempeChaud          BOOLEAN     NOT NULL,
-    tiede               BOOLEAN     NOT NULL
+    temp_id             INT             NOT NULL    AUTO_INCREMENT,
+    temperature         DECIMAL(3,1)    NOT NULL,
+    time_tempe          TIME            NOT NULL,
+    tempeFroid          BOOLEAN         NOT NULL,
+    tempeChaud          BOOLEAN         NOT NULL,
+    tiede               BOOLEAN         NOT NULL,
+    PRIMARY KEY (temp_id)
 );
 
---Création de la table du bruit
 CREATE TABLE bruit(
-    historiqueBruit     INT,
-    bruit               BOOLEAN
+    bruit_id            INT         NOT NULL    AUTO_INCREMENT,
+    time_bruit          TIME,
+    bruit               BOOLEAN,
+    PRIMARY KEY (bruit_id)
 );
 
---Sécurisation des tentative de connection
 CREATE TABLE UserAttempt (
+    attemps_id      INT             NOT NULL    AUTO_INCREMENT,
     last_attempt    DATETIME        NOT NULL,
     attempts        SMALLINT(6)     NOT NULL,
     blocked         BOOLEAN         NOT NULL,
     user_id         SMALLINT(6)     NOT NULL,
-    FOREIGN KEY (user_id  ) REFERENCES User(user_id)
+    PRIMARY KEY (attemps_id),
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
-
-
---Valeur possible pour les roles
 INSERT INTO Role (role_name) VALUES
 ("Admin"),
 ("Utilisateur"),
 ("Visiteur");
 
---Données dans la table utilisateur
-INSERT INTO utilisateur (prenom,nom,motDePasse,email,role_id) VALUES
-('Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
-('Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
-('Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
+INSERT INTO User(username,prenom,nom,motDePasse,email,role_id) VALUES
+('maheb','Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
+('tinkywinky','Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
+('beernadette','Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
 
---Donnée dans la table température
 INSERT INTO temperature (tempeFroid,tempeChaud,tiede) VALUES
 (false,false,false);
 
---Données dans ;a table pour le bruit
 INSERT INTO bruit(bruit) VALUES
 (false);
 
-
---Donnee dans la table attempt
 INSERT INTO UserAttempt (last_attempt, attempts, blocked, user_id) VALUES
 ('00:00:00', 0, false, 1),
 ('00:00:00', 0, false, 1),
