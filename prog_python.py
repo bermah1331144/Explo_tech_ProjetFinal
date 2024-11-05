@@ -1,9 +1,11 @@
 #Ce sont les logiciels qui sera utiliser pour les sensor 
+import RPi.GPIO
 from machine import Pin
 import time
 from w1thermsensor import W1ThermSensor
 import RPi.GPIO as GPIO
 from time import sleep
+import spidev
 
 #Code pour la LED RGB
 
@@ -89,6 +91,11 @@ if ds18b20_sensor is not None:
             
             print(f"Temperature: {temperature_c:.2f}°C | {temperature_f:.2f}°F")
             if temperature_f | temperature_c <= temperature_f_froid | temperature_c_froid : 
+                GPIO.setup([LED_B_PIN],GPIO.HIGH)
+            if temperature_f | temperature_c == temperature_f_tiede | temperature_c_tiede :
+                GPIO.setup([LED_G_PIN],GPIO.HIGH)
+            elif temperature_f | temperature_c >= temperature_f_chaud | temperature_c_chaud :
+                GPIO.setup([LED_R_PIN],GPIO.HIGH)
             
             # Wait for a moment before reading again
             time.sleep(2)
