@@ -37,5 +37,9 @@ class AppView extends View
      */
     public function initialize(): void
     {
+        parent::initialize();
+
+        // Chargez le Identity Helper
+        $this->loadHelper('Authentication.Identity');
     }
 }
