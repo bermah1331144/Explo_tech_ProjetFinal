@@ -16,6 +16,8 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
+    //'debug' => true,
+
     'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
 
     /*

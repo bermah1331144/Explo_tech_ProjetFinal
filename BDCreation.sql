@@ -1,4 +1,3 @@
---Création de la BD
 DROP DATABASE BDallumeToi;
 CREATE DATABASE BDallumeToi;
 USE BDallumeToi;
@@ -34,7 +33,7 @@ CREATE TABLE temperature(
 CREATE TABLE bruit(
     bruit_id            INT         NOT NULL    AUTO_INCREMENT,
     time_bruit          TIME,
-    bruit               BOOLEAN,
+    decibels            INT,
     PRIMARY KEY (bruit_id)
 );
 
@@ -58,13 +57,16 @@ INSERT INTO User(username,prenom,nom,motDePasse,email,role_id) VALUES
 ('tinkywinky','Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
 ('beernadette','Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
 
-INSERT INTO temperature (tempeFroid,tempeChaud,tiede) VALUES
-(false,false,false);
+-- Ajout de valeurs pour temperature et time_tempe
+INSERT INTO temperature (temperature, time_tempe, tempeFroid, tempeChaud, tiede) VALUES
+(22.5, '12:00:00', false, false, true);
 
-INSERT INTO bruit(bruit) VALUES
-(false);
+-- Ajout de time_bruit pour bruit
+INSERT INTO bruit(decibels, time_bruit) VALUES
+(50, '12:00:00');
 
+-- Correction du format de last_attempt pour UserAttempt
 INSERT INTO UserAttempt (last_attempt, attempts, blocked, user_id) VALUES
-('00:00:00', 0, false, 1),
-('00:00:00', 0, false, 1),
-('00:00:00', 0, false, 2);
+('2024-01-01 00:00:00', 0, false, 1),
+('2024-01-01 00:00:00', 0, false, 1),
+('2024-01-01 00:00:00', 0, false, 2);
