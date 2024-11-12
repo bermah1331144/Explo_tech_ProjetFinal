@@ -6,7 +6,7 @@ import time
 import math
 import mysql.connector
 from mysql.connector import Error
-#Doit installer sur le pi (pip install mysql-connector-python)
+
 
 DO = 11
 GPIO.setmode(GPIO.BOARD)
@@ -57,11 +57,12 @@ try :
 
 	myBd = mysql.connector.connect(
 		host='localhost',
-		user='maheb',
-		password= 'Rouge1',
-		datebase='BDallumToi' 
+		user='root',
+		password= 'cegep123',
+		database='BDallumeToi' 
 	)
-	if connection.is_connected():
+
+	if myBd.is_connected():
 		print("Connexion réussie à la base de données")
 
 	monCursor = myBd.cursor()
@@ -73,14 +74,14 @@ try :
 
 	monCursor.execute(insert_temperature,temperature)
 
-	connection.commit()
+	myBd.commit()
 	print("Données insérées avec succès")
 except mysql.connector.Error as e:
 	print("Erreur lors de la connexion à MySQL :", e)
 finally:
-	if connection.is_connected():
+	if  myBd.is_connected():
 		monCursor.close()
-		connection.close()
+		myBd.close()
 		print("Connexion MySQL fermée.")
 
 def loop():
