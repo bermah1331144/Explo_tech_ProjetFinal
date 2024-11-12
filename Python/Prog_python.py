@@ -6,11 +6,11 @@ import time
 import math
 import mysql.connector
 from mysql.connector import Error
+from datetime import datetime
 
 
 DO = 11
 GPIO.setmode(GPIO.BOARD)
-
 
 
 tempeFroid = 18
@@ -47,55 +47,50 @@ def GetTempe(temp) :
 		if temp > tempeChaud :
 		    LED.setColor(0xFF0000)
 
-def ReturnTempe(temp) :
-	temperature = print ('temperature = ', temp, 'C')	
-	return temperature
 
-
-#sert a recuperer les donnees de la temperature pour par la suite l'inejcter ds la BD
-try :
-
-	myBd = mysql.connector.connect(
+def initialiseBD() :
+		myBd = mysql.connector.connect(
 		host='localhost',
 		user='root',
 		password= 'cegep123',
 		database='BDallumeToi' 
 	)
+		return myBd
 
-	if myBd.is_connected():
-		print("Connexion réussie à la base de données")
 
+ #J'ai reussi a recuperer le datetime, mais je narrive pas a la mettre dans la bd. a trouver
+def insert(tempe,myBd) :
+
+	maintenant = datetime.now()
+	print (maintenant)
 	monCursor = myBd.cursor()
-	#donne à insérer
-	temperature = GetTempe()
-
-	#requete SQL d'insertion
-	insert_temperature ="INSERT INTO tremperature (temperature,time_tempe,tempeFroide,tempeChaude,tiede) VALUES (temperature,time_tempe,tempeFroid,tempeChaud,tempeTiede)"
-
-	monCursor.execute(insert_temperature,temperature)
-
+	insert_temperature =f"INSERT INTO temperature (temperature,time_tempe,tempeFroid,tempeChaud,tiede) VALUES ({tempe},time_tempe,{tempeFroid},{tempeChaud},{tempeTiede})"
+	monCursor.execute(insert_temperature)
 	myBd.commit()
 	print("Données insérées avec succès")
-except mysql.connector.Error as e:
-	print("Erreur lors de la connexion à MySQL :", e)
-finally:
-	if  myBd.is_connected():
-		monCursor.close()
-		myBd.close()
-		print("Connexion MySQL fermée.")
+	monCursor.close()
 
+#sert a recuperer les donnees de la temperature pour par la suite l'inejcter ds la BD
 def loop():
 	status = 1
 	tmp = 1
+	myBd = initialiseBD()
 	while True:
 		analogVal = ADC.read(0)
 		Vr = 5 * float(analogVal) / 255
 		Rt = 10000 * Vr / (5 - Vr)
 		temp = 1/(((math.log(Rt / 10000)) / 3950) + (1 / (273.15+25)))
 		temp = temp - 273.15
+
+
+		#impression temp
 		print ('temperature = ', temp, 'C')	
+
+		#changer couleur de la LED
 		GetTempe(temp)
-		ReturnTempe(temp)
+
+		#insert la temp dans la bd
+		insert(temp,myBd)
  
 		# For a threshold, uncomment one of the code for
 		# which module you use. DONOT UNCOMMENT BOTH!
@@ -115,7 +110,8 @@ def loop():
 			Print(tmp)
 			status = tmp
 
-		time.sleep(1)
+		time.sleep(10)
+	myBd.close()
 	
 
 
@@ -125,15 +121,9 @@ if __name__ == '__main__':
 		
 		setup()
 		loop()
-		GetTempe()
 	except KeyboardInterrupt: 
 		pass	
 
-
-
-while True:
-	temperature = ReturnTempe(temperature)
-	sql = "INSERT INTO temperature(temperature,time_tempe) VALUES(temperature,NOW()) "
 
 
 

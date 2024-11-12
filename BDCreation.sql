@@ -37,9 +37,13 @@ CREATE TABLE bruit(
     PRIMARY KEY (bruit_id)
 );
 
-CREATE TABLE UserAttempt (
-    attemps_id      INT             NOT NULL    AUTO_INCREMENT,
-    last_attempt    DATETIME        NOT NULL,
+CREATE TABLE UserAttempt (USE BDallumeToi;
+
+CREATE TABLE Role (
+    role_id     SMALLINT(6)         NOT NULL        AUTO_INCREMENT,
+    role_name   VARCHAR(50)         NOT NULL,
+    PRIMARY KEY (role_id) 
+)   last_attempt    DATETIME        NOT NULL,
     attempts        SMALLINT(6)     NOT NULL,
     blocked         BOOLEAN         NOT NULL,
     user_id         SMALLINT(6)     NOT NULL,
