@@ -14,7 +14,7 @@ class UsersController extends AppController
             $password = $this->request->getData('motDePasse');
 
             // Cherchez l'utilisateur dans la base de données
-            $user = $this->Users->find('all')
+            $user = $this->User->find('all')
                 ->where(['username' => $username])
                 ->first();
 
@@ -39,13 +39,35 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'login']);
     }
 
+    public function register()
+    {
+        $user = $this->User->newEmptyEntity();
+    
+        if ($this->request->is('post')) {
+            $user = $this->User->patchEntity($user, $this->request->getData());
+            
+            $user->motDePasse = password_hash($user->motDePasse, PASSWORD_DEFAULT);
+    
+            if ($this->User->save($user)) {
+                $this->Flash->success('Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.');
+                return $this->redirect(['action' => 'login']);
+            }
+            $this->Flash->error("Impossible de créer le compte. Veuillez vérifier les informations et réessayer.");
+        }
+    
+        $this->set(compact('user'));
+    }
+    
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        if (!$this->request->getSession()->check('Auth.User') && !in_array($this->request->getParam('action'), ['login', 'logout'])) {
-            $this->Flash->error("Veuillez vous connecter pour accéder à cette page.");
-            return $this->redirect(['action' => 'login']);
+        if (!in_array($this->request->getParam('action'), ['login', 'register', 'logout'])) {
+            if (!$this->request->getSession()->check('Auth.User')) {
+                $this->Flash->error("Veuillez vous connecter pour accéder à cette page.");
+                return $this->redirect(['action' => 'login']);
+            }
         }
     }
+
 }
