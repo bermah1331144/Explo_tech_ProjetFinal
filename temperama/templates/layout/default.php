@@ -28,12 +28,12 @@ $cakeDescription = 'Temperama pour vous servir';
             <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
             <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
 
-            <?php if ($this->Identity->isLoggedIn()): ?>
-                <p>Bienvenue, <?= h($this->Identity->get('prenom')) ?>!</p>
-                <a href="logout">Déconnexion</a>
-            <?php else: ?>
-                <a href="users">Connexion</a>
-            <?php endif; ?>
+            <?php if ($this->request->getSession()->check('Auth.User')): ?>
+            <p>Bienvenue, <?= h($this->request->getSession()->read('Auth.User.prenom')) ?>!</p>
+            <a href="users/logout">Déconnexion</a>
+        <?php else: ?>
+            <a href="users/login">Connexion</a>
+        <?php endif; ?>
         </div>
     </nav>
     <main class="main">
