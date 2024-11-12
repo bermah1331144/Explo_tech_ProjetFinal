@@ -6,21 +6,14 @@ import time
 import math
 import mysql.connector
 from mysql.connector import Error
-
-myBd = mysql.connector.connect(
-	host='localhost',
-	user='maheb',
-	password= 'Rouge1',
-	datebase='BDallumToi' 
-)
-
-moncursor = myBd.cursor()
+#Doit installer sur le pi (pip install mysql-connector-python)
 
 DO = 11
 GPIO.setmode(GPIO.BOARD)
 
 
-tempefroid = 18
+
+tempeFroid = 18
 tempeTiede = 20
 tempeChaud = 30
 R = 29
@@ -47,9 +40,9 @@ def Print(x):
 		print ('')
 		
 def GetTempe(temp) :
-		if temp <= tempefroid :
+		if temp <= tempeFroid :
 			LED.setColor(0x0000FF)
-		if temp > tempefroid and temp < tempeChaud :
+		if temp > tempeFroid and temp < tempeChaud :
 			LED.setColor(0x00FF00)
 		if temp > tempeChaud :
 		    LED.setColor(0xFF0000)
@@ -57,6 +50,38 @@ def GetTempe(temp) :
 def ReturnTempe(temp) :
 	temperature = print ('temperature = ', temp, 'C')	
 	return temperature
+
+
+#sert a recuperer les donnees de la temperature pour par la suite l'inejcter ds la BD
+try :
+
+	myBd = mysql.connector.connect(
+		host='localhost',
+		user='maheb',
+		password= 'Rouge1',
+		datebase='BDallumToi' 
+	)
+	if connection.is_connected():
+		print("Connexion réussie à la base de données")
+
+	monCursor = myBd.cursor()
+	#donne à insérer
+	temperature = GetTempe()
+
+	#requete SQL d'insertion
+	insert_temperature ="INSERT INTO tremperature (temperature,time_tempe,tempeFroide,tempeChaude,tiede) VALUES (temperature,time_tempe,tempeFroid,tempeChaud,tempeTiede)"
+
+	monCursor.execute(insert_temperature,temperature)
+
+	connection.commit()
+	print("Données insérées avec succès")
+except mysql.connector.Error as e:
+	print("Erreur lors de la connexion à MySQL :", e)
+finally:
+	if connection.is_connected():
+		monCursor.close()
+		connection.close()
+		print("Connexion MySQL fermée.")
 
 def loop():
 	status = 1
@@ -108,3 +133,6 @@ if __name__ == '__main__':
 while True:
 	temperature = ReturnTempe(temperature)
 	sql = "INSERT INTO temperature(temperature,time_tempe) VALUES(temperature,NOW()) "
+
+
+
