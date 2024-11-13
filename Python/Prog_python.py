@@ -7,11 +7,18 @@ import math
 import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
-
+import smbus
+GPIO.setwarnings(False)
 
 DO = 11
 GPIO.setmode(GPIO.BOARD)
+# for RPI version 1, use "bus = smbus.SMBus(0)"
+bus = smbus.SMBus(1)
 
+#check your PCF8591 address by type in 'sudo i2cdetect -y -1' in terminal.
+def setup(Addr):
+	global address
+	address = Addr
 
 tempeFroid = 18
 tempeTiede = 20
@@ -25,19 +32,6 @@ def setup():
 	ADC.setup(0x48)
 	GPIO.setup(DO, GPIO.IN)
 
-def Print(x):
-	if x == 1:
-		print ('')
-		print ('***********')
-		print ('* Better~ *')
-		print ('***********')
-		print ('')
-	if x == 0:
-		print ('')
-		print ('************')
-		print ('* Too Hot! *')
-		print ('************')
-		print ('')
 		
 def GetTempe(temp) :
 		if temp <= tempeFroid :
@@ -61,10 +55,10 @@ def initialiseBD() :
  #J'ai reussi a recuperer le datetime, mais je narrive pas a la mettre dans la bd. a trouver
 def insert(tempe,myBd) :
 
-	maintenant = datetime.now()
+	maintenant = datetime.now().strftime("%H:%M:%S")
 	print (maintenant)
 	monCursor = myBd.cursor()
-	insert_temperature =f"INSERT INTO temperature (temperature,time_tempe,tempeFroid,tempeChaud,tiede) VALUES ({tempe},{maintenant},{tempeFroid},{tempeChaud},{tempeTiede})"
+	insert_temperature =f"INSERT INTO temperature (temperature,time_tempe,tempeFroid,tempeChaud,tiede) VALUES ({tempe},'{maintenant}',{tempeFroid},{tempeChaud},{tempeTiede})"
 	monCursor.execute(insert_temperature)
 	myBd.commit()
 	print("Données insérées avec succès")
@@ -87,7 +81,7 @@ def loop():
 		print ('temperature = ', temp, 'C')	
 
 		#changer couleur de la LED
-		GetTempe(temp)
+		#GetTempe(temp)
 
 		#insert la temp dans la bd
 		insert(temp,myBd)
@@ -107,7 +101,7 @@ def loop():
 
     
 		if tmp != status:
-			Print(tmp)
+			print(tmp)
 			status = tmp
 
 		time.sleep(10)
@@ -117,8 +111,7 @@ def loop():
 
 if __name__ == '__main__':
 	try:
-		LED.setup(R,G,B)
-		
+		LED.setup(R,G,B)	
 		setup()
 		loop()
 	except KeyboardInterrupt: 
