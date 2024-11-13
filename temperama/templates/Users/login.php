@@ -6,5 +6,5 @@
     <?= $this->Form->button(__('Se connecter')) ?>
 <?= $this->Form->end() ?>
 
-<p>Pas encore inscrit ? <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'register']) ?>">Créez un compte ici</a>.</p>
+<p>Pas encore inscrit ? <a href="<?= $this->Url->build(['action' => 'register']) ?>">Créez un compte ici</a>.</p>
 

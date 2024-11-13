@@ -6,24 +6,31 @@ use App\Controller\AppController;
 
 class UsersController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        // Load the Users model explicitly to avoid any loading issues
+        $this->fetchTable('users');
+    }
+
     public function login()
     {
-        // Si le formulaire est soumis en POST
+        // Check if the form was submitted via POST
         if ($this->request->is('post')) {
             $username = $this->request->getData('username');
             $password = $this->request->getData('motDePasse');
 
-            // Cherchez l'utilisateur dans la base de données
-            $user = $this->User->find('all')
+            // Find the user in the database by username
+            $user = $this->users->find('all')
                 ->where(['username' => $username])
                 ->first();
 
-            // Vérifiez si l'utilisateur existe et si le mot de passe est correct
+            // Verify if the user exists and if the password is correct
             if ($user && password_verify($password, $user->motDePasse)) {
-                // Stocker l'utilisateur dans la session
+                // Store the user data in the session
                 $this->request->getSession()->write('Auth.User', $user);
 
-                // Redirigez vers la page d'accueil ou une autre page protégée
+                // Redirect to the home page or another protected page
                 return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
             } else {
                 $this->Flash->error('Nom d’utilisateur ou mot de passe incorrect.');
@@ -33,7 +40,7 @@ class UsersController extends AppController
 
     public function logout()
     {
-        // Efface les informations de l'utilisateur dans la session
+        // Clear user session data
         $this->request->getSession()->delete('Auth.User');
         $this->Flash->success('Vous avez été déconnecté.');
         return $this->redirect(['action' => 'login']);
@@ -41,33 +48,37 @@ class UsersController extends AppController
 
     public function register()
     {
-        $user = $this->User->newEmptyEntity();
-    
+        // Check if the form was submitted via POST
         if ($this->request->is('post')) {
-            $user = $this->User->patchEntity($user, $this->request->getData());
-            
+            // Patch the entity with the form data using newEntity() as an alternative
+            $user = $this->Users->patchEntity($this->Users->newEntity(), $this->request->getData());
+
+            // Hash the password before saving
             $user->motDePasse = password_hash($user->motDePasse, PASSWORD_DEFAULT);
-    
-            if ($this->User->save($user)) {
-                $this->Flash->success('Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.');
+
+            // Save the user to the database
+            if ($this->Users->save($user)) { // Use $this->Users with the correct capitalization
+                $this->Flash->success(__('Registration successful.'));
                 return $this->redirect(['action' => 'login']);
             }
-            $this->Flash->error("Impossible de créer le compte. Veuillez vérifier les informations et réessayer.");
+            $this->Flash->error(__('Registration failed. Please, try again.'));
         }
-    
+
         $this->set(compact('user'));
     }
-    
+
+
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
 
+        // Allow access to login, register, and logout actions without authentication
         if (!in_array($this->request->getParam('action'), ['login', 'register', 'logout'])) {
+            // Check if the user is logged in
             if (!$this->request->getSession()->check('Auth.User')) {
                 $this->Flash->error("Veuillez vous connecter pour accéder à cette page.");
                 return $this->redirect(['action' => 'login']);
             }
         }
     }
-
 }

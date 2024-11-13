@@ -8,7 +8,7 @@ CREATE TABLE Role (
     PRIMARY KEY (role_id) 
 );
 
-CREATE TABLE User(
+CREATE TABLE Users(
     user_id             SMALLINT(6)     NOT NULL     AUTO_INCREMENT,
     username            VARCHAR(50)     NOT NULL     UNIQUE,
     prenom              VARCHAR(50)     NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE UserAttempt (
     blocked         BOOLEAN         NOT NULL,
     user_id         SMALLINT(6)     NOT NULL,
     PRIMARY KEY (attemps_id),
-    FOREIGN KEY (user_id) REFERENCES User(user_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
 INSERT INTO Role (role_name) VALUES
@@ -52,7 +52,7 @@ INSERT INTO Role (role_name) VALUES
 ("Utilisateur"),
 ("Visiteur");
 
-INSERT INTO User(username,prenom,nom,motDePasse,email,role_id) VALUES
+INSERT INTO Users(username,prenom,nom,motDePasse,email,role_id) VALUES
 ('maheb','Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
 ('tinkywinky','Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
 ('beernadette','Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
