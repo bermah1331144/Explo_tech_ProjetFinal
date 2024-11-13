@@ -64,7 +64,7 @@ def insert(tempe,myBd) :
 	maintenant = datetime.now()
 	print (maintenant)
 	monCursor = myBd.cursor()
-	insert_temperature =f"INSERT INTO temperature (temperature,time_tempe,tempeFroid,tempeChaud,tiede) VALUES ({tempe},time_tempe,{tempeFroid},{tempeChaud},{tempeTiede})"
+	insert_temperature =f"INSERT INTO temperature (temperature,time_tempe,tempeFroid,tempeChaud,tiede) VALUES ({tempe},{maintenant},{tempeFroid},{tempeChaud},{tempeTiede})"
 	monCursor.execute(insert_temperature)
 	myBd.commit()
 	print("Données insérées avec succès")
