@@ -1,4 +1,4 @@
-DROP DATABASE BDallumeToi;
+DROP DATABASE IF EXISTS BDallumeToi;
 CREATE DATABASE BDallumeToi;
 USE BDallumeToi;
 
@@ -8,7 +8,7 @@ CREATE TABLE Role (
     PRIMARY KEY (role_id) 
 );
 
-CREATE TABLE User(
+CREATE TABLE Users(
     user_id             SMALLINT(6)     NOT NULL     AUTO_INCREMENT,
     username            VARCHAR(50)     NOT NULL     UNIQUE,
     prenom              VARCHAR(50)     NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE Role (
     blocked         BOOLEAN         NOT NULL,
     user_id         SMALLINT(6)     NOT NULL,
     PRIMARY KEY (attemps_id),
-    FOREIGN KEY (user_id) REFERENCES User(user_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
 INSERT INTO Role (role_name) VALUES
@@ -56,20 +56,17 @@ INSERT INTO Role (role_name) VALUES
 ("Utilisateur"),
 ("Visiteur");
 
-INSERT INTO User(username,prenom,nom,motDePasse,email,role_id) VALUES
+INSERT INTO Users(username,prenom,nom,motDePasse,email,role_id) VALUES
 ('maheb','Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
 ('tinkywinky','Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
 ('beernadette','Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
 
--- Ajout de valeurs pour temperature et time_tempe
 INSERT INTO temperature (temperature, time_tempe, tempeFroid, tempeChaud, tiede) VALUES
 (22.5, '12:00:00', false, false, true);
 
--- Ajout de time_bruit pour bruit
 INSERT INTO bruit(decibels, time_bruit) VALUES
 (50, '12:00:00');
 
--- Correction du format de last_attempt pour UserAttempt
 INSERT INTO UserAttempt (last_attempt, attempts, blocked, user_id) VALUES
 ('2024-01-01 00:00:00', 0, false, 1),
 ('2024-01-01 00:00:00', 0, false, 1),
