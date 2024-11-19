@@ -1,12 +1,18 @@
 <?php
 namespace App\Controller;
-use App\Controller\AppController;
 
 
 
-class HomeControlleur extends AppController
+class AcceuilControlleur extends AppController
 {
 
+    public function index()
+    {
+        // Récupérer toutes les entrées de la table temperature
+        $temperatures = $this->Temperature->find('all');
+        $this->set(compact('temperatures'));
+    }
+    
     public function AfficherTempActuel()
     {
         $temperatures= $this->Temperatures->find()->firt();
@@ -15,11 +21,5 @@ class HomeControlleur extends AppController
             $this->set('temperature', $tempValue);
         } 
     }
-    public function index()
-    {
-        // Récupérer toutes les entrées de la table temperature
-        $temperatures = $this->Temperature->find('all');
-        $this->set(compact('temperatures'));
-    }
-
 }
+?>
