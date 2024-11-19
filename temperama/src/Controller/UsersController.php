@@ -10,30 +10,29 @@ class UsersController extends AppController
     {
         parent::initialize();
         // Load the Users model explicitly to avoid any loading issues
-        $this->fetchTable('users');
+        $this->fetchTable('Users');
     }
 
     public function login()
     {
-        // Check if the form was submitted via POST
         if ($this->request->is('post')) {
             $username = $this->request->getData('username');
             $password = $this->request->getData('motDePasse');
-
-            // Find the user in the database by username
-            $user = $this->users->find('all')
+    
+            // Recherchez l'utilisateur dans la base de données
+            $user = $this->Users->find('all')
                 ->where(['username' => $username])
                 ->first();
-
-            // Verify if the user exists and if the password is correct
+    
+            // Vérifiez si l'utilisateur existe et si le mot de passe est correct
             if ($user && password_verify($password, $user->motDePasse)) {
-                // Store the user data in the session
+                // Stockez les informations utilisateur dans la session
                 $this->request->getSession()->write('Auth.User', $user);
-
-                // Redirect to the home page or another protected page
-                return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+    
+                // Redirigez vers l'action `index` du contrôleur `Temperature`
+                return $this->redirect(['controller' => 'Temperature', 'action' => 'index']);
             } else {
-                $this->Flash->error('Nom d’utilisateur ou mot de passe incorrect.');
+                $this->Flash->error(__('Nom d’utilisateur ou mot de passe incorrect.'));
             }
         }
     }
@@ -48,24 +47,36 @@ class UsersController extends AppController
 
     public function register()
     {
-        // Check if the form was submitted via POST
-        if ($this->request->is('post')) {
-            // Patch the entity with the form data using newEntity() as an alternative
-            $user = $this->Users->patchEntity($this->Users->newEntity(), $this->request->getData());
+        // Initialisez $user comme une nouvelle entité utilisateur
+        $user = $this->Users->newEmptyEntity();
 
-            // Hash the password before saving
+        if ($this->request->is('post')) {
+            // Récupérez les données du formulaire
+            $data = $this->request->getData();
+
+            // Attribuez automatiquement le rôle "Utilisateur"
+            $data['role_id'] = 2;
+            // Patch l'entité avec les données du formulaire
+            $user = $this->Users->patchEntity($user, $data);
+
+            // Hash le mot de passe avant de sauvegarder
             $user->motDePasse = password_hash($user->motDePasse, PASSWORD_DEFAULT);
 
-            // Save the user to the database
-            if ($this->Users->save($user)) { // Use $this->Users with the correct capitalization
-                $this->Flash->success(__('Registration successful.'));
+            // Tente de sauvegarder l'utilisateur
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('Enregistrement réussi.'));
                 return $this->redirect(['action' => 'login']);
             }
-            $this->Flash->error(__('Registration failed. Please, try again.'));
+            if (!empty($user->getError('username'))) {
+                $this->Flash->error(__('Ce nom d’utilisateur est déjà utilisé.'));
+            } else {
+                $this->Flash->error(__('L\'enregistrement a échoué. Veuillez réessayer.'));
+            }
         }
-
+        // Passe la variable $user à la vue
         $this->set(compact('user'));
     }
+
 
 
     public function beforeFilter(\Cake\Event\EventInterface $event)

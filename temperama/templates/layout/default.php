@@ -22,18 +22,19 @@ $cakeDescription = 'Temperama pour vous servir';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>PHP</a>
+            <a href="<?= $this->Url->build('/') ?>"><span>TEMPE</span>RAMA</a>
         </div>
         <div class="top-nav-links">
             <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
             <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
 
-            <?php if ($this->request->getSession()->check('Auth.users')): ?>
-            <p>Bienvenue, <?= h($this->request->getSession()->read('Auth.users.prenom')) ?>!</p>
-            <a href="users/logout">Déconnexion</a>
+            <?php if ($this->request->getSession()->check('Auth.User')): ?>
+            <p>Bienvenue, <?= h($this->request->getSession()->read('Auth.User.prenom')) ?>!</p>
+            <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>">Déconnexion</a>
         <?php else: ?>
-            <a href="users/login">Connexion</a>
+            <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'login']) ?>">Connexion</a>
         <?php endif; ?>
+
         </div>
     </nav>
     <main class="main">

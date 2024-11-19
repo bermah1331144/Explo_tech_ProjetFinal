@@ -10,4 +10,3 @@
 <?= $this->Form->end() ?>
 
 <p>Déjà inscrit ? <a href="<?= $this->Url->build(['action' => 'login']) ?>">Connectez-vous ici</a>.</p>
-
