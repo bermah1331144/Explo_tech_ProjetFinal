@@ -10,5 +10,8 @@
     scolaire. Par la suite, nous devons faire fonctionner un rapberryPi qui fait partie de IoT,
     soit l'internet des Objets. 
 </p>
-
-<p>Température : <?=h($temperature)?>°C</p>
+<?php if (!empty($temperature)): ?>
+    <p>Température la plus récente : <?= h($temperature->temperature) ?>°C</p>
+<?php else: ?>
+    <p>Aucune température disponible pour le moment.</p>
+<?php endif; ?>

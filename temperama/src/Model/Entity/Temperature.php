@@ -12,8 +12,4 @@ class Temperature extends Entity
         'slug' => false
     ];
 }
-
-
-
-
 ?>

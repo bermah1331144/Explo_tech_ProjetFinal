@@ -21,8 +21,8 @@ class TemperatureController extends AppController
     public function index()
     {
          // Récupérer toutes les entrées de la table temperature
-        $temperatures = $this->Temperature->find('all');
-        $this->set(compact('temperatures'));
+        $temperature = $this->Temperature->find('all');
+        $this->set(compact('temperature'));
     }
 }
 
