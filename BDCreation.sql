@@ -13,7 +13,7 @@ CREATE TABLE Users(
     username            VARCHAR(50)     NOT NULL     UNIQUE,
     prenom              VARCHAR(50)     NOT NULL,
     nom                 VARCHAR(50)     NOT NULL,
-    motDePasse          VARCHAR(50)     NOT NULL,
+    motDePasse          VARCHAR(255)    NOT NULL,
     email               VARCHAR(50)     NOT NULL,
     role_id             SMALLINT(6)     NOT NULL,
     PRIMARY KEY (user_id ),
