@@ -38,18 +38,17 @@ class AccueilController extends AppController
 
 
 
-   public function AfficherTableau($type){
-        $tableauFroid = document.getElementById('tableau-froid-contrainer');
-        $tableauChaud = document.getElementById('tableau-chaud-contrainer');
+   public function AfficherTableau($type = null){
         
-        $tableauFroid.style.display == 'none';
-        $tableauChaud.style.display =='none';
+        $this->fetchTable('Temperature');
 
-        if(type == 'froid'){
-            $tableauFroid.style.display == 'block';
+        $temperatures = [];
+
+        if($type == 'froid'){
+            $temperatures = $this->Temperature->find('all')->where(['tempeFroid' => true]);
             
-        }else if(type == 'chaud'){
-            $tableauChaud.style.display == 'block';
+        }else if($type == 'chaud'){
+            $temperatures = $this->Temperature->find('all')->where(['tempeChaud' => true]);
         }
    }
 

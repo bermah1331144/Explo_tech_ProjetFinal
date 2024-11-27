@@ -18,8 +18,9 @@
 
 <button id="btn-temp-froide" onclick="afficherTableau($type)">Température froide</button>
 <button id="btn-temp-chaud" onclick="afficherTableau($type)">Température chaude</button>
-
-
+<?php
+    $type = $_GET['type'] ?? '';
+?>
 
 <div id="tableau-froid-container" style="display: none; margin-top: 20px;">
     <h3>Températures froides</h3>
