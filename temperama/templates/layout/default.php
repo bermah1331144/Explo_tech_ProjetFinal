@@ -25,8 +25,7 @@ $cakeDescription = 'Temperama pour vous servir';
             <a href="<?= $this->Url->build('/') ?>"><span>TEMPE</span>RAMA</a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
-            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+            <a target="_blank" rel="noopener" href="<?= $this->Url->build(['controller' => 'Accueil', 'action' => 'index']) ?>">Accueil</a>
 
             <?php if ($this->request->getSession()->check('Auth.User')): ?>
             <p>Bienvenue, <?= h($this->request->getSession()->read('Auth.User.prenom')) ?>!</p>
