@@ -25,7 +25,10 @@ $cakeDescription = 'Temperama pour vous servir';
             <a href="<?= $this->Url->build('/') ?>"><span>TEMPE</span>RAMA</a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="<?= $this->Url->build(['controller' => 'Accueil', 'action' => 'index']) ?>">Accueil</a>
+            <a href="<?= $this->Url->build(['controller' => 'Accueil', 'action' => 'index']) ?>">Accueil</a>
+            <?php if ($this->request->getSession()->check('Auth.User')): ?>
+                <a href="<?= $this->Url->build(['controller' => 'Temperature', 'action' => 'index']) ?>">Temperature</a>
+            <?php endif; ?>
 
             <?php if ($this->request->getSession()->check('Auth.User')): ?>
             <p>Bienvenue, <?= h($this->request->getSession()->read('Auth.User.prenom')) ?>!</p>
