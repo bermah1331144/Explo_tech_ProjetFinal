@@ -11,8 +11,8 @@ class AccueilController extends AppController
     {
         // Récupérer toutes les entrées de la table temperatures
         $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
-        $temperatures = $temperaturesTable->find()->first();
-        $this->set(compact('temperatures'));
+        $temperature = $temperaturesTable->find()->first();
+        $this->set(compact('temperature'));
     }
 }
 ?>
