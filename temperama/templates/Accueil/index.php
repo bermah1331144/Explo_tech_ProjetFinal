@@ -22,7 +22,7 @@
     $type = $_GET['type'] ?? '';
 ?>
 
-<div id="tableau-froid-container" style="display: none; margin-top: 20px;">
+<div id="tableau-froid-container" style=" margin-top: 20px;">
     <h3>Températures froides</h3>
     <table class="table table-bordered">
         <thead>
@@ -40,11 +40,22 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <script>
+    document.getElementById('monBbtn-temp-froide').addEventListener('click', function () {
+        var tableau = document.getElementById('monTableau');
+        if (tableau-froid-container === 'none' || tableau-froid-container === '') {
+            tableau-froid-container = 'table'; // Rendre visible
+        } else {
+            tableau-froid-container = 'none'; // Masquer à nouveau
+        }
+    });
+    </script>
+
 </div>
 
 
 
-<div id="tableau-chaud-container" style="display: none; margin-top: 20px;">
+<div id="tableau-chaud-container" style=" margin-top: 20px;">
     <h3>Températures chaudes</h3>
     <table class="table table-bordered">
         <thead>
@@ -62,4 +73,15 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <script>
+    document.getElementById('btn-temp-chaud').addEventListener('click', function () {
+        var tableau = document.getElementById('monTableau');
+        if (tableau-chaud-container === 'none' || tableau-chaud-container === '') {
+            tableau-chaud-container = 'table'; // Rendre visible
+        } else {
+            tableau-chaud-container = 'none'; // Masquer à nouveau
+        }
+    });
+    </script>
+
 </div>
