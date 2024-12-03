@@ -20,27 +20,35 @@ class AccueilController extends AppController
         $this->set(compact('temperature', 'etatTableau'));
     }
 
-
-    // Ma condition pour aller chercher des temperature ne semle pas bien fonctionner a regarder
     public function getTemperatureFroide()
-    {
-        $etatTableau = 1;
-        $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
-        $temperatureFroide = $temperaturesTable->find('all',['condition'=>['tempeFroid =' => 1], 'fields' =>['tempeFroid']
-        ]);
-        $this->set(compact('temperatureFroide', 'etatTableau'));
-        $this->render('index');
-    }
+{
+    $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
+    $temperature = $temperaturesTable->find()->first();
+    $etatTableau = 1;
+    $temperatureFroide = $temperaturesTable->find('all', [
+        'conditions' => ['tempeFroid' => 1], 
+        'fields' => ['temperature', 'time_tempe']       
+    ]);
 
-    public function getTemperatureChaude(){
-        $etatTableau = 2;
-        $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
-        $temperatureChaude = $temperaturesTable->find('all',['condition'=> ['TempeChaud ='=> 1, 'date'], 'fiels'=>['tempeChaud']
-        ]);
-        $this->set(compact('temperatureChaude','etatTableau'));
-        $this->render('index');
+    // Envoi des données à la vue
+    $this->set(compact('temperature','temperatureFroide', 'etatTableau'));
+    $this->render('index');
+}
 
-    }
+public function getTemperatureChaude()
+{
+    $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
+    $temperature = $temperaturesTable->find()->first();
+    $etatTableau = 2;
+    $temperatureChaude = $temperaturesTable->find('all', [
+        'conditions' => ['tempeChaud' => 1], 
+        'fields' => ['temperature', 'time_tempe'] 
+    ]);
+
+    $this->set(compact('temperature','temperatureChaude', 'etatTableau'));
+    $this->render('index');
+}
+
 
 
 }

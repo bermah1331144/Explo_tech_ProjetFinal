@@ -34,11 +34,11 @@
             </thead>
             <tbody>
                 <?php        
-                    foreach ($temperatureFroide as $temperature): ?>
+                    foreach ($temperatureFroide as $temp): ?>
                     <tr>
-                        <td><?= h($temperature->temperature) ?></td>
-                        <td><?= h($temperature->time_tempe) ?></td>
-                        <td><?= h($temperature->created) ?></td>
+                        <td><?= h($temp->temperature) ?></td>
+                        <td><?= h($temp->time_tempe) ?></td>
+                        <td><?= h($temp->created) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -58,11 +58,11 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($temperatureChaude as $temperature): ?>
+                <?php foreach ($temperatureChaude as $tempe): ?>
                     <tr>
-                        <td><?= h($temperature->temperature) ?></td>
-                        <td><?= h($temperature->time_tempe) ?></td>
-                        <td><?= h($temperature->created) ?></td>
+                        <td><?= h($tempe->temperature) ?></td>
+                        <td><?= h($tempe->time_tempe) ?></td>
+                        <td><?= h($tempe->created) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
