@@ -16,50 +16,56 @@
     <p>Aucune température disponible pour le moment.</p>
 <?php endif; ?>
 
-<button id="btn-temp-froide" onclick="afficherTableau($type)">Température froide</button>
-<button id="btn-temp-chaud" onclick="afficherTableau($type)">Température chaude</button>
-<?php
-    $type = $_GET['type'] ?? '';
-?>
+<button><?= $this->Html->link('Temperature Froide', ['controller' => 'Accueil', 'action' => 'getTemperatureFroide'], ['class' => 'btn btn-primary']) ?></button>
+<button><?= $this->Html->link('Temperature Chaude', ['controller' => 'Accueil', 'action' => 'getTemperatureChaude'], ['class' => 'btn btn-primary']) ?></button>
 
-<div id="tableau-froid-container" style="display: none; margin-top: 20px;">
-    <h3>Températures froides</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Température</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($temperatureFroide as $temperature): ?>
+<?php if ($etatTableau == 0): ?>
+
+<?php endif?>
+<?php if ($etatTableau == 1 ) : ?>
+    <div id="tableau-froid-container" style=" margin-top: 20px;">
+        <h3>Températures froides</h3>
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td><?= h($temperature->temperature) ?></td>
-                    <td><?= h($temperature->created) ?></td>
+                    <th>Température</th>
+                    <th>Date</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                <?php        
+                    foreach ($temperatureFroide as $temperature): ?>
+                    <tr>
+                        <td><?= h($temperature->temperature) ?></td>
+                        <td><?= h($temperature->time_tempe) ?></td>
+                        <td><?= h($temperature->created) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif;?>
 
 
-
-<div id="tableau-chaud-container" style="display: none; margin-top: 20px;">
-    <h3>Températures chaudes</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Température</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($temperatureChaude as $temperature): ?>
+<?php if ($etatTableau == 2) : ?>
+    <div id="tableau-chaud-container" style=" margin-top: 20px;">
+        <h3>Températures chaudes</h3>
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td><?= h($temperature->temperature) ?></td>
-                    <td><?= h($temperature->created) ?></td>
+                    <th>Température</th>
+                    <th>Date</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                <?php foreach ($temperatureChaude as $temperature): ?>
+                    <tr>
+                        <td><?= h($temperature->temperature) ?></td>
+                        <td><?= h($temperature->time_tempe) ?></td>
+                        <td><?= h($temperature->created) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif;?>
