@@ -33,7 +33,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($temperatureFroide as $temperature): ?>
+                <?php        
+                    foreach ($temperatureFroide as $temperature): ?>
                     <tr>
                         <td><?= h($temperature->temperature) ?></td>
                         <td><?= h($temperature->time_tempe) ?></td>

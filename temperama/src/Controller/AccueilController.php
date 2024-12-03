@@ -26,7 +26,7 @@ class AccueilController extends AppController
     {
         $etatTableau = 1;
         $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
-        $temperatureFroide = $temperaturesTable->find('all',['condition'=>['temperature<' => 15], 'fields' =>['temperature' => 15 ]
+        $temperatureFroide = $temperaturesTable->find('all',['condition'=>['tempeFroid =' => 1], 'fields' =>['tempeFroid']
         ]);
         $this->set(compact('temperatureFroide', 'etatTableau'));
         $this->render('index');
@@ -35,7 +35,7 @@ class AccueilController extends AppController
     public function getTemperatureChaude(){
         $etatTableau = 2;
         $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
-        $temperatureChaude = $temperaturesTable->find('all',['condition'=> ['temperature>'=> 15], 'fiels'=>['temperature' => 15]
+        $temperatureChaude = $temperaturesTable->find('all',['condition'=> ['TempeChaud ='=> 1, 'date'], 'fiels'=>['tempeChaud']
         ]);
         $this->set(compact('temperatureChaude','etatTableau'));
         $this->render('index');
