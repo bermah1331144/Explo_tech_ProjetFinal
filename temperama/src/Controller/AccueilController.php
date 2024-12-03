@@ -6,52 +6,41 @@ use App\Controller\AppController;
 class AccueilController extends AppController
 {
 
+    # 0 affiche aucun temperature
+    # 1 affiche temperatire froid
+    # 2 affiche temperature chaud
 
     public function index()
     {
+        $etatTableau = 0;
         // Récupérer toutes les entrées de la table temperatures
         $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
         $temperature = $temperaturesTable->find()->first();
         $this->set(compact('temperature'));
+        $this->set(compact('temperature', 'etatTableau'));
     }
-    
-    public function GetTemperatureFroide()
+
+
+    // Ma condition pour aller chercher des temperature ne semle pas bien fonctionner a regarder
+    public function getTemperatureFroide()
     {
-        $temperatureFroide = $this->Temperature->find('all',['condition'=>['temperature<' => 0], 'fields' =>['tempeFroid']
+        $etatTableau = 1;
+        $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
+        $temperatureFroide = $temperaturesTable->find('all',['condition'=>['temperature<' => 15], 'fields' =>['temperature' => 15 ]
         ]);
-        $this->set(compact('tempeFroid',$temperatureFroide));
-    
+        $this->set(compact('temperatureFroide', 'etatTableau'));
+        $this->render('index');
     }
 
-    public function GetTemperatureChaude(){
-
-        $temperatureChaude =$this->temperature->find('all',['condition'=> ['temperature<'=> 35], 'fiels'=>['tempeChaud']
+    public function getTemperatureChaude(){
+        $etatTableau = 2;
+        $temperaturesTable = TableRegistry::getTableLocator()->get('Temperature');
+        $temperatureChaude = $temperaturesTable->find('all',['condition'=> ['temperature>'=> 15], 'fiels'=>['temperature' => 15]
         ]);
-        $this->set(compact('tempeChaud', $temperatureChaude));
+        $this->set(compact('temperatureChaude','etatTableau'));
+        $this->render('index');
 
     }
-
-    public function GetTouteTemperature(){
-        $this->set(compact('temperatureFroide','temperatureChaude'));
-    }
-
-
-
-
-   public function AfficherTableau($type = null){
-        
-        $this->fetchTable('Temperature');
-
-        $temperatures = [];
-
-        if($type == 'froid'){
-            $temperatures = $this->Temperature->find('all')->where(['tempeFroid' => true]);
-            
-        }else if($type == 'chaud'){
-            $temperatures = $this->Temperature->find('all')->where(['tempeChaud' => true]);
-        }
-   }
-
 
 
 }
