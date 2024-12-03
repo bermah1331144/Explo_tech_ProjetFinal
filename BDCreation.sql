@@ -1,6 +1,5 @@
---Création de la BD
+DROP DATABASE IF EXISTS BDallumeToi;
 CREATE DATABASE BDallumeToi;
-
 USE BDallumeToi;
 
 CREATE TABLE Role (
@@ -9,68 +8,66 @@ CREATE TABLE Role (
     PRIMARY KEY (role_id) 
 );
 
-
--- Création de la table des utilisateur
-CREATE TABLE utilisateur(
-    utilisateur_id      SMALLINT(6)     NOT NULL     AUTO_INCREMENT,
-    nomUtilisateur      VARCHAR(50)     NOT NULL     UNIQUE,
+CREATE TABLE Users(
+    user_id             SMALLINT(6)     NOT NULL     AUTO_INCREMENT,
+    username            VARCHAR(50)     NOT NULL     UNIQUE,
     prenom              VARCHAR(50)     NOT NULL,
     nom                 VARCHAR(50)     NOT NULL,
-    motDePasse          VARCHAR(50)     NOT NULL,
+    motDePasse          VARCHAR(255)    NOT NULL,
     email               VARCHAR(50)     NOT NULL,
     role_id             SMALLINT(6)     NOT NULL,
-    PRIMARY KEY (utilisateur_id),
+    PRIMARY KEY (user_id ),
     FOREIGN KEY (role_id) REFERENCES Role(role_id)
 );
 
-
--- Creation de la table des températrature
 CREATE TABLE temperature(
-    temperature         DECIMAL(3,1),
-    historiqueTemps     TIME,
-    tempeFroid          BOOLEAN     NOT NULL,
-    tempeChaud          BOOLEAN     NOT NULL,
-    tiede               BOOLEAN     NOT NULL
+    temp_id             INT             NOT NULL    AUTO_INCREMENT,
+    temperature         DECIMAL(3,1)    NOT NULL,
+    time_tempe          TIME            NOT NULL,
+    tempeFroid          BOOLEAN         NOT NULL,
+    tempeChaud          BOOLEAN         NOT NULL,
+    tiede               BOOLEAN         NOT NULL,
+    PRIMARY KEY (temp_id)
 );
 
---Création de la table du bruit
 CREATE TABLE bruit(
-    historiqueBruit     INT,
-    tempsBruit          TIME,
-    bruit               BOOLEAN
+    bruit_id            INT         NOT NULL    AUTO_INCREMENT,
+    time_bruit          TIME,
+    decibels            INT,
+    PRIMARY KEY (bruit_id)
 );
 
---Sécurisation des tentative de connection
-CREATE TABLE UserAttempt (
-    last_attempt    DATETIME        NOT NULL,
+CREATE TABLE UserAttempt (USE BDallumeToi;
+
+CREATE TABLE Role (
+    role_id     SMALLINT(6)         NOT NULL        AUTO_INCREMENT,
+    role_name   VARCHAR(50)         NOT NULL,
+    PRIMARY KEY (role_id) 
+)   last_attempt    DATETIME        NOT NULL,
     attempts        SMALLINT(6)     NOT NULL,
     blocked         BOOLEAN         NOT NULL,
     user_id         SMALLINT(6)     NOT NULL,
-    FOREIGN KEY (utilisateur_id) REFERENCES User(utilisateur_id)
+    PRIMARY KEY (attemps_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
---Valeur possible pour les roles
-INSERT INTO role (role_id) VALUES
+INSERT INTO Role (role_name) VALUES
 ("Admin"),
 ("Utilisateur"),
 ("Visiteur");
 
---Données dans la table utilisateur
-INSERT INTO utilisateur (prenom,nom,motDePasse,email,role_id) VALUES
-('Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
-('Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
-('Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
+INSERT INTO Users(username,prenom,nom,motDePasse,email,role_id) VALUES
+('maheb','Mahélie','Bergeron','Rouge1','mahelie.b@cegepjonquiere.ca',1),
+('tinkywinky','Catherine','Perron-Arpin','Bleu1','catherine.pa@cegepjonquiere.ca',1),
+('beernadette','Nicolas','cote','Vert1','nicolas.c@cegepjonquiere.ca',2);
 
---Donnée dans la table température
-INSERT INTO temperature (tempeFroid,tempeChaud,tiede) VALUES
-(false,false,false);
+INSERT INTO temperature (temperature, time_tempe, tempeFroid, tempeChaud, tiede) VALUES
+(22.5, '12:00:00', false, false, true);
 
---Données dans ;a table pour le bruit
-INSERT INTO bruit(bruit) VALUES
-(false);
+INSERT INTO bruit(decibels, time_bruit) VALUES
+(50, '12:00:00');
 
---Donnee dans la table attempt
 INSERT INTO UserAttempt (last_attempt, attempts, blocked, user_id) VALUES
-('00:00:00', 0, false, 1),
-('00:00:00', 0, false, 1),
-('00:00:00', 0, false, 2);
+('2024-01-01 00:00:00', 0, false, 1),
+('2024-01-01 00:00:00', 0, false, 1),
+('2024-01-01 00:00:00', 0, false, 2);
